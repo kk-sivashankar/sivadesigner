@@ -1,0 +1,200 @@
+<style>
+/* General Styles */
+.siva-portfolio-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.siva-tab-button {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.siva-tab-button.active {
+  background-color: #333;
+  color: white;
+}
+
+.siva-tab-pane {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.siva-tab-pane.active {
+  display: block;
+  opacity: 1;
+}
+
+.siva-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.siva-gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.siva-gallery-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+/* Image Overlay for Project Name and Description */
+.siva-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.siva-overlay h3 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.siva-overlay p {
+  font-size: 1em;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.siva-gallery-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.siva-gallery-item:hover img {
+  transform: scale(1.1);
+  opacity: 0.7;
+}
+
+.siva-gallery-item:hover .siva-overlay {
+  opacity: 1;
+}
+</style>
+<div class="siva-portfolio-tabs">
+  <button class="siva-tab-button active" data-siva-tab="web-design-siva">Web Design</button>
+  <button class="siva-tab-button" data-siva-tab="graphic-design-siva">Graphic Design</button>
+</div>
+
+<div class="siva-portfolio-content">
+  <div id="web-design-siva" class="siva-tab-pane active">
+    <div class="siva-gallery">
+      <div class="siva-gallery-item">
+        <a href="mages/portfolio/website/ahb-large.webp" data-lightbox="web-design-siva" data-title="E-commerce Website">
+          <img src="images/portfolio/website/ahb-short.webp" alt="E-commerce Website">
+          <div class="siva-overlay">
+            <h3>E-commerce Website</h3>
+            <p>A modern e-commerce site...</p>
+          </div>
+        </a>
+      </div>
+      <div class="siva-gallery-item">
+        <a href="mages/portfolio/website/baps-2024-large.webp" data-lightbox="web-design-siva" data-title="E-commerce Website">
+          <img src="images/portfolio/website/baps-2024-short.webp" alt="E-commerce Website">
+          <div class="siva-overlay">
+            <h3>School Website</h3>
+            <p>A responsive website for...</p>
+          </div>
+        </a>
+      </div>
+      </div>
+  </div>
+
+  <div id="graphic-design-siva" class="siva-tab-pane">
+    <div class="siva-gallery">
+      <div class="siva-gallery-item">
+        <a href="images/poster-1.jpg" data-lightbox="graphic-design-siva" data-title="Event Poster">
+          <img src="images/poster-1-thumb.jpg" alt="Event Poster">
+          <div class="siva-overlay">
+            <h3>Event Poster</h3>
+            <p>A vibrant poster for...</p>
+          </div>
+        </a>
+      </div>
+      </div>
+  </div>
+</div>
+<script>
+// Tab Functionality
+const sivaTabButtons = document.querySelectorAll('.siva-tab-button');
+const sivaTabPanes = document.querySelectorAll('.siva-tab-pane');
+
+console.log('Siva Tab buttons found:', sivaTabButtons);
+console.log('Siva Tab panes found:', sivaTabPanes);
+
+sivaTabButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    console.log('Siva Tab button clicked:', button);
+    // Deactivate all tabs and panes
+    sivaTabButtons.forEach(btn => {
+      btn.classList.remove('active');
+      console.log('Removed active from siva button:', btn);
+    });
+    sivaTabPanes.forEach(pane => {
+      pane.classList.remove('active');
+      console.log('Removed active from siva pane:', pane);
+    });
+
+    // Activate the clicked tab and corresponding pane
+    button.classList.add('active');
+    const sivaTabId = button.getAttribute('data-siva-tab');
+    const sivaTargetPane = document.getElementById(sivaTabId);
+    console.log('Siva Target pane ID:', sivaTabId);
+    console.log('Siva Target pane element:', sivaTargetPane);
+    if (sivaTargetPane) {
+      sivaTargetPane.classList.add('active'); // Add active class FIRST
+      setTimeout(() => {
+        sivaTargetPane.style.opacity = 1;
+      }, 50); // Small delay for the fade-in effect
+    } else {
+      console.error('Siva Tab pane not found with ID:', sivaTabId);
+    }
+  });
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const sivaGalleries = document.querySelectorAll('.siva-gallery');
+  sivaGalleries.forEach(gallery => {
+    const links = gallery.querySelectorAll('a');
+    links.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default link behavior
+        const lightbox = new SimpleLightbox(links, {
+          /* SimpleLightbox Options (Optional) */
+          // You can customize the lightbox here if needed
+          nav: true,
+          captions: true,
+          loop: false,
+          animationSpeed: 250, // Example option
+          fadeSpeed: 250, // Example option
+          showCounter: true
+        });
+        lightbox.open(this);
+      });
+    });
+  });
+});
+</script>
